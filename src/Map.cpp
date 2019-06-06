@@ -53,23 +53,28 @@ Map::get_surrounding_indexes(const size_t cell_index) const {
 
 	if (!top_edge) {
 		result.push_back(cell_index - line_length); // top
-		if (!left_edge) {
-			result.push_back(cell_index - line_length - 1); // top left
-			result.push_back(cell_index - 1); // left
-		}
-		if (!right_edge) {
-			result.push_back(cell_index - line_length + 1); // top right
-			result.push_back(cell_index + 1); // right
-		}
 	}
+	if (!left_edge && !left_edge) {
+		result.push_back(cell_index - line_length - 1); // top left
+	}
+	if (!left_edge) {
+		result.push_back(cell_index - 1); // left
+	}
+	if (!right_edge && !top_edge) {
+		result.push_back(cell_index - line_length + 1); // top right
+	}
+	if (!right_edge) {
+		result.push_back(cell_index + 1); // right
+	}
+
 	if (!bottom_edge) {
 		result.push_back(cell_index + line_length); // bottom
-		if (!left_edge) {
-			result.push_back(cell_index + line_length - 1); // bottom left
-		}
-		if (!right_edge) {
-			result.push_back(cell_index + line_length + 1); // bottom right
-		}
+	}
+	if (!bottom_edge && !left_edge) {
+		result.push_back(cell_index + line_length - 1); // bottom left
+	}
+	if (!bottom_edge && !right_edge) {
+		result.push_back(cell_index + line_length + 1); // bottom right
 	}
 
 	return result;
