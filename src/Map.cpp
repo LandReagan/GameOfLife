@@ -66,7 +66,6 @@ Map::get_surrounding_indexes(const size_t cell_index) const {
 	if (!right_edge) {
 		result.push_back(cell_index + 1); // right
 	}
-
 	if (!bottom_edge) {
 		result.push_back(cell_index + line_length); // bottom
 	}
@@ -77,6 +76,16 @@ Map::get_surrounding_indexes(const size_t cell_index) const {
 		result.push_back(cell_index + line_length + 1); // bottom right
 	}
 
+	return result;
+}
+
+std::vector<size_t>
+Map::get_alive_cells_indexes() const {
+
+	std::vector<size_t> result;
+	for (size_t i = 0; i < cells.size(); i++) {
+		if (cells[i].is_alive()) result.push_back(i);
+	}
 	return result;
 }
 

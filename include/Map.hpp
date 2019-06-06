@@ -39,6 +39,8 @@ public:
 
 	/** Getter for a Cell's surrounding indexes */
 	std::vector<size_t> get_surrounding_indexes(const size_t cell_index) const;
+	/** Getter for alive cells indexes */
+	std::vector<size_t> get_alive_cells_indexes() const;
 
 private:
 	std::size_t line_length;

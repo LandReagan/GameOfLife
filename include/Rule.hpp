@@ -30,7 +30,7 @@ public:
 	/** Rule ctor from 2 vectors. */
 	Rule(std::vector<unsigned int> cB, std::vector<unsigned int> cS);
 	/**
-	 *  Rule ctor from a string, with format: "B3S34" (example: standard rule).
+	 *  Rule ctor from a string, with format: "B3S23" (example: standard rule).
 	 *  Number of digits for birth or survival has to be one or more.
 	 */
 	Rule(std::string rule_string);
@@ -46,6 +46,16 @@ public:
 
 	/** Rule getter as a string */
 	std::string get_rule_as_string() const;
+
+	/** Checks if number n is in the B rule */
+	inline bool check_birth_rule(size_t n) {
+		return std::find(B.begin(), B.end(), n) != B.end();
+	}
+
+	/** Checks if number n is in the S rule */
+	inline bool check_survival_rule(size_t n) {
+		return std::find(S.begin(), S.end(), n) != S.end();
+	}
 
 private:
 	std::vector<unsigned int> B;

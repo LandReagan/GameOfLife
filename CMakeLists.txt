@@ -23,7 +23,8 @@ set(GOL_TESTS_SOURCES
     tests/launcher.cpp
     tests/Rule_tests.cpp
     tests/Cell_tests.cpp
-    tests/Map_tests.cpp)
+    tests/Map_tests.cpp
+    tests/Engine_tests.cpp)
 
 add_library(GOL_lib ${GOL_LIB_HEADERS} ${GOL_LIB_SOURCES})
 target_include_directories(GOL_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
