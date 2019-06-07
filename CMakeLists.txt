@@ -8,7 +8,8 @@ set(GOL_LIB_SOURCES
     src/GameOfLife.cpp 
     src/Map.cpp 
     src/Rule.cpp 
-    src/UI.cpp)
+    src/UI.cpp
+    src/GolWindow.cpp)
     
 set(GOL_LIB_HEADERS 
     include/constants.hpp 
@@ -17,7 +18,8 @@ set(GOL_LIB_HEADERS
     include/Map.hpp
     include/Cell.hpp
     include/Rule.hpp
-    include/UI.hpp)
+    include/UI.hpp
+    include/GolWindow.hpp)
     
 set(GOL_TESTS_SOURCES
     tests/launcher.cpp

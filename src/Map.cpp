@@ -32,6 +32,21 @@ Map::set_dead_cells(const std::vector<size_t> & indexes) {
 	}
 }
 
+void
+Map::kill_all_cells() {
+	for (Cell cell : cells) cell.kill();
+}
+
+void
+Map::reset_randomly_alive_percent(const size_t percents) {
+	kill_all_cells();
+	std::srand(std::time(nullptr));
+	while (get_alive_cells_indexes().size() < cells.size() * percents / 100) {
+		size_t index = (size_t) cells.size() * std::rand() / RAND_MAX;
+		set_alive_cells(std::vector<size_t>({index}));
+	}
+}
+
 std::vector<size_t>
 Map::get_surrounding_indexes(const size_t cell_index) const {
 

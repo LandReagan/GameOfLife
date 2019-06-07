@@ -13,6 +13,7 @@
 
 #include "Engine.hpp"
 #include "constants.hpp"
+#include "GolWindow.hpp"
 
 namespace gol {
 
@@ -23,7 +24,7 @@ class UI {
 
 public:
 	/** Constructor only requires an Engine */
-	inline UI(Engine & c_engine) : engine(c_engine) {}
+	UI(Engine & r_engine);
 
 	/** Method to call to launch the SFML event manager */
 	void run();
@@ -31,8 +32,15 @@ public:
 private:
 	Engine & engine;
 
-	std::vector<sf::RectangleShape> get_cells_rectangles() const;
-	size_t get_touched_cell_index(const size_t x, const size_t y) const;
+	std::vector<sf::RectangleShape>
+	get_cells_rectangles(const float cells_width) const;
+
+	size_t
+	get_touched_cell_index(const size_t x, const size_t y) const;
+
+	// SFML stuff
+	GolWindow window;
+	sf::View view;
 };
 
 } /* namespace gol */

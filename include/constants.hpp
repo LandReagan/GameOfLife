@@ -21,15 +21,13 @@ const std::string VERSION = "v0.0.1";
  */
 const size_t DEFAULT_WINDOW_HEIGHT_PX = 600;
 const size_t DEFAULT_WINDOW_WIDTH_PX = 800;
-const float DEFAULT_CELL_SIZE = 5.0;
-const float DEFAULT_RECTANGLE_SIZE = 4.0;
+const float DEFAULT_CELL_SIZE = 10.0;
+const float DEFAULT_RECTANGLE_SIZE = 9.0;
 
 // Rules
-const std::vector<unsigned int> DEFAULT_BORN({3});
-const std::vector<unsigned int> DEFAULT_SURVIVING({2, 3});
-const gol::Rule DEFAULT_RULE(DEFAULT_BORN, DEFAULT_SURVIVING);
+const gol::Rule DEFAULT_RULE("B3S23");
 
 // Map
-const gol::Map DEFAULT_MAP(120, 100);
+const gol::Map DEFAULT_MAP(50, 50);
 
 #endif /* CONSTANTS_HPP_ */

@@ -11,6 +11,8 @@
 #include <Cell.hpp>
 
 #include  <vector>
+#include <ctime>
+#include <cstdlib>
 
 namespace gol {
 
@@ -36,6 +38,11 @@ public:
 	void set_alive_cells(const std::vector<size_t> & indexes);
 	/** Setter for dead cells at index, whatever previous state */
 	void set_dead_cells(const std::vector<size_t> & indexes);
+	/** Self explanatory... */
+	void kill_all_cells();
+	/** Reset the Map to a new state where parameter is percentage of alive
+	 * cells, distributed randomly */
+	void reset_randomly_alive_percent(const size_t percents);
 
 	/** Getter for a Cell's surrounding indexes */
 	std::vector<size_t> get_surrounding_indexes(const size_t cell_index) const;

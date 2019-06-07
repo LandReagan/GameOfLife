@@ -9,12 +9,18 @@
 
 namespace gol {
 
-void UI::run() {
-	sf::RenderWindow window(
-			sf::VideoMode(DEFAULT_WINDOW_WIDTH_PX, DEFAULT_WINDOW_HEIGHT_PX),
-			APP_NAME + VERSION);
+UI::UI(Engine & r_engine) : engine(r_engine){
+	window.create(
+		sf::VideoMode(
+			DEFAULT_WINDOW_WIDTH_PX,
+			DEFAULT_WINDOW_HEIGHT_PX),
+		APP_NAME + " " + VERSION
+	);
+	view = window.getDefaultView();
+}
 
-	std::vector<sf::RectangleShape> rectangles = get_cells_rectangles();
+void
+UI::run() {
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -29,11 +35,20 @@ void UI::run() {
 				Map new_map = engine.get_map();
 				new_map.set_alive_cells(indexes);
 				engine.set_map(new_map);
+			} else if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::S) {
+					engine.step();
+				} else if (event.key.code == sf::Keyboard::R) {
+					Map new_map = engine.get_map();
+					new_map.reset_randomly_alive_percent(50);
+					engine.set_map(new_map);
+				}
 			}
 		}
 
 		window.clear();
-		rectangles = get_cells_rectangles();
+		std::vector<sf::RectangleShape> rectangles =
+				get_cells_rectangles(DEFAULT_RECTANGLE_SIZE);
 		for (auto rectangle : rectangles) {
 			window.draw(rectangle);
 		}
@@ -42,22 +57,29 @@ void UI::run() {
 }
 
 std::vector<sf::RectangleShape>
-UI::get_cells_rectangles() const {
+UI::get_cells_rectangles(const float cells_width) const {
 	std::vector<sf::RectangleShape> result;
 
-	const size_t width = engine.get_map().get_line_length();
 	const std::vector<Cell> cells = engine.get_map().get_cells();
+	const size_t cells_per_line_number = engine.get_map().get_line_length();
+	const size_t cells_per_column_number = cells.size() / cells_per_line_number;
 
 	for (size_t i = 0; i < cells.size(); ++i) {
-		size_t x_shift = i % width;
-		size_t y_shift = i / width;
-		sf::RectangleShape rectangle(sf::Vector2f(DEFAULT_RECTANGLE_SIZE, DEFAULT_RECTANGLE_SIZE));
+		size_t x_shift = i % cells_per_line_number;
+		size_t y_shift = i / cells_per_line_number;
+		sf::RectangleShape rectangle(
+				sf::Vector2f(cells_width, cells_width));
 
 		if (cells[i].is_alive()) {
 			rectangle.setFillColor(sf::Color::Blue);
 		}
 
-		rectangle.setPosition(sf::Vector2f(x_shift * DEFAULT_CELL_SIZE, y_shift * DEFAULT_CELL_SIZE));
+		rectangle.setPosition(
+			sf::Vector2f(
+				x_shift * DEFAULT_CELL_SIZE,
+				y_shift * DEFAULT_CELL_SIZE
+			)
+		);
 		result.push_back(rectangle);
 	}
 
