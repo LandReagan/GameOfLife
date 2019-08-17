@@ -14,18 +14,25 @@
 
 namespace gol {
 
+/**
+ * Defines the App, requires an Engine and a UI
+ */
 class GameOfLife {
 public:
-	GameOfLife(): engine(Engine(DEFAULT_RULE, DEFAULT_MAP)), ui(engine) {}
+	GameOfLife():
+		engine(std::unique_ptr<Engine>(new Engine(DEFAULT_RULE, DEFAULT_MAP))),
+		ui(std::unique_ptr<UI>(new UI(*engine)))
+	{}
 
+	/** Starts the event manager, i.e. starts the App! */
 	void run();
 
 private:
 	// todo: logger initialisation
 	// todo: config loading
 
-	Engine engine;
-	UI ui;
+	std::unique_ptr<Engine> engine;
+	std::unique_ptr<UI> ui;
 };
 
 } /* namespace gol */

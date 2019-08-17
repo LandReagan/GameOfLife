@@ -16,13 +16,20 @@ UI::UI(Engine & r_engine) : engine(r_engine){
 			DEFAULT_WINDOW_HEIGHT_PX),
 		APP_NAME + " " + VERSION
 	);
+	window.setVerticalSyncEnabled(true);
 	view = window.getDefaultView();
 }
 
 void
 UI::run() {
 
+	sf::Clock clock;
+	sf::Time timePerFrame = sf::milliseconds(16);
+
 	while (window.isOpen()) {
+
+		sf::Time start = clock.getElapsedTime();
+
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
@@ -42,6 +49,10 @@ UI::run() {
 					Map new_map = engine.get_map();
 					new_map.reset_randomly_alive_percent(50);
 					engine.set_map(new_map);
+				} else if (event.key.code == sf::Keyboard::K) {
+					Map new_map = engine.get_map();
+					new_map.kill_all_cells();
+					engine.set_map(new_map);
 				}
 			}
 		}
@@ -53,6 +64,9 @@ UI::run() {
 			window.draw(rectangle);
 		}
 		window.display();
+
+		sf::Time end = clock.getElapsedTime();
+		sf::sleep(timePerFrame - end + start);
 	}
 }
 

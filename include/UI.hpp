@@ -10,6 +10,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #include "Engine.hpp"
 #include "constants.hpp"

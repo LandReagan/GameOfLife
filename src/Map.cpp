@@ -34,7 +34,7 @@ Map::set_dead_cells(const std::vector<size_t> & indexes) {
 
 void
 Map::kill_all_cells() {
-	for (Cell cell : cells) cell.kill();
+	for (Cell & cell : cells) cell.kill();
 }
 
 void

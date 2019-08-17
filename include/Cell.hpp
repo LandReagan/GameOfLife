@@ -1,10 +1,3 @@
-/*
- * Cell.cpp
- *
- *  Created on: 05 June 2019
- *      Author: landry
- */
-
 #ifndef CELL_HPP_
 #define CELL_HPP_
 

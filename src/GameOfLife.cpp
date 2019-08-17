@@ -11,7 +11,7 @@ namespace gol {
 
 void
 GameOfLife::run() {
-	ui.run();
+	ui->run();
 }
 
 } /* namespace gol */
