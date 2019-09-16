@@ -35,6 +35,9 @@ public:
 	 */
 	void step();
 
+	/** Toggle alive or dead cell at [index] */
+	void toggle_cell(const size_t);
+
 private:
 	Rule rule;
 	Map map;

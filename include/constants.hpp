@@ -21,13 +21,13 @@ const std::string VERSION = "v0.0.1";
  */
 const size_t DEFAULT_WINDOW_HEIGHT_PX = 600;
 const size_t DEFAULT_WINDOW_WIDTH_PX = 800;
-const float DEFAULT_CELL_SIZE = 10.0;
-const float DEFAULT_RECTANGLE_SIZE = 9.0;
+const float DEFAULT_CELL_SIZE = 50.0;
+const float DEFAULT_RECTANGLE_SIZE = 50.0;
 
 // Rules
 const gol::Rule DEFAULT_RULE("B3S23");
 
 // Map
-const gol::Map DEFAULT_MAP(50, 50);
+const gol::Map DEFAULT_MAP(10, 10);
 
 #endif /* CONSTANTS_HPP_ */

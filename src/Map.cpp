@@ -9,9 +9,10 @@
 
 namespace gol {
 
-Map::Map(std::size_t width, std::size_t height) {
-	line_length = width;
-	cells.assign(width * height, Cell());
+Map::Map(std::size_t width, std::size_t height) : Map(width, height, BoundaryType::TOROIDAL){}
+
+Map::Map(std::size_t width, std::size_t height, Map::BoundaryType type) : line_length(width), type(type) {
+    cells.assign(width * height, Cell());
 }
 
 void
@@ -30,6 +31,11 @@ Map::set_dead_cells(const std::vector<size_t> & indexes) {
 			cells.at(index).kill();
 		}
 	}
+}
+
+void
+Map::toggle_cell_at(const size_t index) {
+    cells[index].toggle();
 }
 
 void
@@ -59,37 +65,54 @@ Map::get_surrounding_indexes(const size_t cell_index) const {
 	bool bottom_edge = false;
 
 	size_t number_of_lines = cells.size() / line_length;
+	size_t cells_number = get_cells_number();
 
-	// Setting the booleans with so smart arithmetics
+	// Setting the booleans with so smart arithmetic
 	if (cell_index / line_length == 0) top_edge = true;
 	if (cell_index % line_length == 0) left_edge = true;
 	if (cell_index % line_length == line_length - 1) right_edge = true;
 	if (cell_index / line_length == number_of_lines - 1) bottom_edge = true;
 
-	if (!top_edge) {
-		result.push_back(cell_index - line_length); // top
-	}
-	if (!left_edge && !left_edge) {
-		result.push_back(cell_index - line_length - 1); // top left
-	}
-	if (!left_edge) {
-		result.push_back(cell_index - 1); // left
-	}
-	if (!right_edge && !top_edge) {
-		result.push_back(cell_index - line_length + 1); // top right
-	}
-	if (!right_edge) {
-		result.push_back(cell_index + 1); // right
-	}
-	if (!bottom_edge) {
-		result.push_back(cell_index + line_length); // bottom
-	}
-	if (!bottom_edge && !left_edge) {
-		result.push_back(cell_index + line_length - 1); // bottom left
-	}
-	if (!bottom_edge && !right_edge) {
-		result.push_back(cell_index + line_length + 1); // bottom right
-	}
+    if (!top_edge) { // top
+        result.push_back(cell_index - line_length);
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index - line_length + cells_number);
+    }
+    if (!top_edge && !left_edge) { // top left
+        result.push_back(cell_index - line_length - 1);
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index - line_length - 1 + cells_number + line_length);
+    }
+    if (!left_edge) { // left
+        result.push_back(cell_index - 1);
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index - 1 + line_length);
+    }
+    if (!right_edge && !top_edge) { // top right
+        result.push_back(cell_index - line_length + 1);
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index - line_length + 1 + cells_number - line_length);
+    }
+    if (!right_edge) { // right
+        result.push_back(cell_index + 1);
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index + 1 - line_length);
+    }
+    if (!bottom_edge) { // bottom
+        result.push_back(cell_index + line_length);
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index + line_length - cells_number);
+    }
+    if (!bottom_edge && !left_edge) { // bottom left
+        result.push_back(cell_index + line_length - 1);
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index + line_length - 1 - cells_number + line_length);
+    }
+    if (!bottom_edge && !right_edge) {
+        result.push_back(cell_index + line_length + 1); // bottom right
+    } else if (type == TOROIDAL) {
+        result.push_back(cell_index + line_length + 1 - cells_number - line_length); // bottom right
+    }
 
 	return result;
 }

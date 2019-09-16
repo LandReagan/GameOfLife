@@ -24,8 +24,13 @@ namespace gol {
 class Map {
 
 public:
-	/** Only constructor, takes a width and a height */
+
+    /** Boundary types define how the surrounding indexes are calculated*/
+    enum BoundaryType {STANDARD, TOROIDAL};
+
+	/** Ctor takes a width and a height, and optionally a boundary */
 	Map(std::size_t width, std::size_t height);
+	Map(std::size_t width, std::size_t height, BoundaryType);
 
 	/** line_length getter */
 	std::size_t get_line_length() const { return line_length; }
@@ -38,6 +43,10 @@ public:
 	void set_alive_cells(const std::vector<size_t> & indexes);
 	/** Setter for dead cells at index, whatever previous state */
 	void set_dead_cells(const std::vector<size_t> & indexes);
+
+	/** Toggle Cell's state at index */
+	void toggle_cell_at(const size_t);
+
 	/** Self explanatory... */
 	void kill_all_cells();
 	/** Reset the Map to a new state where parameter is percentage of alive
@@ -52,6 +61,7 @@ public:
 private:
 	std::size_t line_length;
 	std::vector<Cell> cells;
+	BoundaryType type;
 };
 
 } /* namespace gol */

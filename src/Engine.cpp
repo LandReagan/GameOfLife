@@ -47,4 +47,9 @@ Engine::step() {
 	map.set_dead_cells(cells_to_set_dead);
 }
 
+void
+Engine::toggle_cell(const size_t index) {
+    map.toggle_cell_at(index);
+}
+
 } /* namespace gol */

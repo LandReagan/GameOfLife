@@ -19,7 +19,8 @@ set(GOL_LIB_HEADERS
     include/Cell.hpp
     include/Rule.hpp
     include/UI.hpp
-    include/GolWindow.hpp)
+    include/GolWindow.hpp
+    include/utils_debug.hpp)
     
 set(GOL_TESTS_SOURCES
     tests/launcher.cpp

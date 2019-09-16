@@ -10,14 +10,13 @@
 namespace gol {
 
 UI::UI(Engine & r_engine) : engine(r_engine){
-	window.create(
-		sf::VideoMode(
-			DEFAULT_WINDOW_WIDTH_PX,
-			DEFAULT_WINDOW_HEIGHT_PX),
-		APP_NAME + " " + VERSION
-	);
+
+	window.create(sf::VideoMode(DEFAULT_WINDOW_WIDTH_PX, DEFAULT_WINDOW_HEIGHT_PX),	APP_NAME + " " + VERSION);
 	window.setVerticalSyncEnabled(true);
-	view = window.getDefaultView();
+
+	size_t line_cells_number = engine.get_map().get_line_length();
+	size_t column_cells_number = engine.get_map().get_cells_number() / line_cells_number;
+	rectangles_texture.create(line_cells_number * DEFAULT_CELL_SIZE, column_cells_number * DEFAULT_CELL_SIZE);
 }
 
 void
@@ -30,18 +29,12 @@ UI::run() {
 
 		sf::Time start = clock.getElapsedTime();
 
-		sf::Event event;
+		sf::Event event{};
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			} else if (event.type == sf::Event::MouseButtonPressed) {
-				size_t x = event.mouseButton.x;
-				size_t y = event.mouseButton.y;
-				size_t index = get_touched_cell_index(x, y);
-				const std::vector<size_t> indexes({index});
-				Map new_map = engine.get_map();
-				new_map.set_alive_cells(indexes);
-				engine.set_map(new_map);
+                engine.toggle_cell(get_touched_cell_index(event.mouseButton.x, event.mouseButton.y));
 			} else if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::S) {
 					engine.step();
@@ -60,9 +53,9 @@ UI::run() {
 		window.clear();
 		std::vector<sf::RectangleShape> rectangles =
 				get_cells_rectangles(DEFAULT_RECTANGLE_SIZE);
-		for (auto rectangle : rectangles) {
-			window.draw(rectangle);
-		}
+        update_rectangle_texture(rectangles_texture, rectangles);
+		sf::Sprite rectangles_sprite(rectangles_texture.getTexture());
+		window.draw(rectangles_sprite);
 		window.display();
 
 		sf::Time end = clock.getElapsedTime();
@@ -76,24 +69,17 @@ UI::get_cells_rectangles(const float cells_width) const {
 
 	const std::vector<Cell> cells = engine.get_map().get_cells();
 	const size_t cells_per_line_number = engine.get_map().get_line_length();
-	const size_t cells_per_column_number = cells.size() / cells_per_line_number;
 
 	for (size_t i = 0; i < cells.size(); ++i) {
 		size_t x_shift = i % cells_per_line_number;
 		size_t y_shift = i / cells_per_line_number;
-		sf::RectangleShape rectangle(
-				sf::Vector2f(cells_width, cells_width));
+		sf::RectangleShape rectangle(sf::Vector2f(cells_width, cells_width));
 
 		if (cells[i].is_alive()) {
 			rectangle.setFillColor(sf::Color::Blue);
 		}
 
-		rectangle.setPosition(
-			sf::Vector2f(
-				x_shift * DEFAULT_CELL_SIZE,
-				y_shift * DEFAULT_CELL_SIZE
-			)
-		);
+		rectangle.setPosition(sf::Vector2f(x_shift * DEFAULT_CELL_SIZE,y_shift * DEFAULT_CELL_SIZE));
 		result.push_back(rectangle);
 	}
 
@@ -108,5 +94,13 @@ UI::get_touched_cell_index(const size_t x, const size_t y) const {
 	return column + line * width;
 }
 
+void
+UI::update_rectangle_texture(sf::RenderTexture& texture, const std::vector<sf::RectangleShape>& rectangles) const {
+    texture.clear(sf::Color::Red);
+    for (auto const & rectangle : rectangles) {
+        texture.draw(rectangle);
+    }
+    texture.display();
+}
 
 } /* namespace gol */

@@ -26,23 +26,27 @@ class UI {
 
 public:
 	/** Constructor only requires an Engine */
-	UI(Engine & r_engine);
+	explicit UI(Engine & r_engine);
 
 	/** Method to call to launch the SFML event manager */
 	void run();
 
 private:
 	Engine & engine;
+	sf::RenderTexture rectangles_texture;
 
-	std::vector<sf::RectangleShape>
-	get_cells_rectangles(const float cells_width) const;
+    std::vector<sf::RectangleShape>
+    get_cells_rectangles(float cells_width) const;
 
 	size_t
-	get_touched_cell_index(const size_t x, const size_t y) const;
+	get_touched_cell_index(size_t x, size_t y) const;
+
+	void
+	update_rectangle_texture(sf::RenderTexture&, const std::vector<sf::RectangleShape> &) const;
 
 	// SFML stuff
 	GolWindow window;
-	sf::View view;
+
 };
 
 } /* namespace gol */

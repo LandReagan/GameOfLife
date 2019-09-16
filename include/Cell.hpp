@@ -20,6 +20,9 @@ public:
 	/** Make the Cell NOT alive whatever its previous state */
 	inline void kill() { alive = false; }
 
+	/** Toggle state */
+	inline void toggle() { alive = !alive; }
+
 private:
 	bool alive;
 };
