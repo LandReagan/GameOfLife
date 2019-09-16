@@ -4,7 +4,6 @@
  *  Created on: 26 May 2019
  *      Author: landry
  */
-
 #include "Map.hpp"
 
 namespace gol {
@@ -58,61 +57,39 @@ Map::get_surrounding_indexes(const size_t cell_index) const {
 
 	std::vector<size_t> result;
 
+	size_t row = cell_index / line_length;
+	size_t col = cell_index % line_length;
+    size_t cells_number = get_cells_number();
+    size_t number_of_lines = cells_number / line_length;
+
 	// Booleans for checking edge positions
-	bool left_edge = false;
-	bool right_edge = false;
-	bool top_edge = false;
-	bool bottom_edge = false;
+	bool left_edge = col == 0;
+	bool right_edge = col == line_length - 1;
+	bool top_edge = row == 0;
+	bool bottom_edge = row == number_of_lines - 1;
 
-	size_t number_of_lines = cells.size() / line_length;
-	size_t cells_number = get_cells_number();
+	size_t upper_shift = 0;
+	size_t right_shift = 0;
+	size_t left_shift = 0;
+	size_t lower_shift = 0;
 
-	// Setting the booleans with so smart arithmetic
-	if (cell_index / line_length == 0) top_edge = true;
-	if (cell_index % line_length == 0) left_edge = true;
-	if (cell_index % line_length == line_length - 1) right_edge = true;
-	if (cell_index / line_length == number_of_lines - 1) bottom_edge = true;
+    if (top_edge && type == TOROIDAL) upper_shift  = cells_number;
+    if (right_edge && type == TOROIDAL) right_shift = -line_length;
+    if (bottom_edge && type == TOROIDAL) lower_shift = -cells_number;
+    if (left_edge && type == TOROIDAL) left_shift = line_length;
 
-    if (!top_edge) { // top
-        result.push_back(cell_index - line_length);
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index - line_length + cells_number);
-    }
-    if (!top_edge && !left_edge) { // top left
-        result.push_back(cell_index - line_length - 1);
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index - line_length - 1 + cells_number + line_length);
-    }
-    if (!left_edge) { // left
-        result.push_back(cell_index - 1);
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index - 1 + line_length);
-    }
-    if (!right_edge && !top_edge) { // top right
-        result.push_back(cell_index - line_length + 1);
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index - line_length + 1 + cells_number - line_length);
-    }
-    if (!right_edge) { // right
-        result.push_back(cell_index + 1);
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index + 1 - line_length);
-    }
-    if (!bottom_edge) { // bottom
-        result.push_back(cell_index + line_length);
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index + line_length - cells_number);
-    }
-    if (!bottom_edge && !left_edge) { // bottom left
-        result.push_back(cell_index + line_length - 1);
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index + line_length - 1 - cells_number + line_length);
-    }
-    if (!bottom_edge && !right_edge) {
-        result.push_back(cell_index + line_length + 1); // bottom right
-    } else if (type == TOROIDAL) {
-        result.push_back(cell_index + line_length + 1 - cells_number - line_length); // bottom right
-    }
+    if (!top_edge || type == TOROIDAL) result.push_back(cell_index - line_length + upper_shift); // UPPER
+    if ((!top_edge && !right_edge) || type == TOROIDAL)
+        result.push_back(cell_index - line_length + 1 + upper_shift + right_shift); // UPPER RIGHT
+    if (!right_edge || type == TOROIDAL) result.push_back(cell_index + 1 + right_shift); // RIGHT
+    if ((!bottom_edge && !right_edge) || type == TOROIDAL)
+        result.push_back(cell_index + line_length + 1 + right_shift + lower_shift); // LOWER RIGHT
+    if (!bottom_edge || type == TOROIDAL) result.push_back(cell_index + line_length + lower_shift); // LOWER
+    if ((!bottom_edge && !left_edge) || type == TOROIDAL)
+        result.push_back(cell_index + line_length - 1 + lower_shift + left_shift); // LOWER LEFT
+    if (!left_edge || type == TOROIDAL) result.push_back(cell_index - 1 + left_shift); // LEFT
+    if ((!top_edge && !left_edge) || type == TOROIDAL)
+        result.push_back(cell_index - line_length - 1 + upper_shift + left_shift); // UPPER LEFT
 
 	return result;
 }

@@ -13,6 +13,7 @@
 #include  <vector>
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
 
 namespace gol {
 
