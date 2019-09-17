@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "Rule.hpp"
+#include "Map.hpp"
 
 const std::string APP_NAME = "Game Of Life";
 const std::string VERSION = "v0.0.1";

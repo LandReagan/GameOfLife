@@ -9,9 +9,11 @@
 
 namespace gol {
 
-UI::UI(Engine & r_engine) : engine(r_engine){
+UI::UI(Engine & r_engine, std::shared_ptr<Configuration> conf) : engine(r_engine), configuration(conf){
 
-	window.create(sf::VideoMode(DEFAULT_WINDOW_WIDTH_PX, DEFAULT_WINDOW_HEIGHT_PX),	APP_NAME + " " + VERSION);
+	window.create(
+	        sf::VideoMode(configuration->get_window_width(),configuration->get_window_height()),
+	        APP_NAME + " " + VERSION);
 	window.setVerticalSyncEnabled(true);
 
 	size_t line_cells_number = engine.get_map().get_line_length();

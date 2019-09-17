@@ -14,6 +14,7 @@
 #include <chrono>
 
 #include "Engine.hpp"
+#include "Configuration.hpp"
 #include "constants.hpp"
 #include "GolWindow.hpp"
 
@@ -26,7 +27,7 @@ class UI {
 
 public:
 	/** Constructor only requires an Engine */
-	explicit UI(Engine & r_engine);
+	explicit UI(Engine&, std::shared_ptr<Configuration>);
 
 	/** Method to call to launch the SFML event manager */
 	void run();
@@ -46,6 +47,9 @@ private:
 
 	// SFML stuff
 	GolWindow window;
+
+	// Configuration
+	std::shared_ptr<Configuration> configuration;
 
 };
 

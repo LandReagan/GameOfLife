@@ -6,6 +6,7 @@
  */
 
 #include "GameOfLife.hpp"
+#include "Configuration.hpp"
 
 namespace gol {
 

@@ -9,7 +9,7 @@ set(GOL_LIB_SOURCES
     src/Map.cpp 
     src/Rule.cpp 
     src/UI.cpp
-    src/GolWindow.cpp)
+    src/GolWindow.cpp src/Configuration.cpp)
     
 set(GOL_LIB_HEADERS 
     include/constants.hpp 
@@ -20,7 +20,7 @@ set(GOL_LIB_HEADERS
     include/Rule.hpp
     include/UI.hpp
     include/GolWindow.hpp
-    include/utils_debug.hpp)
+    include/utils_debug.hpp include/Configuration.hpp)
     
 set(GOL_TESTS_SOURCES
     tests/launcher.cpp
