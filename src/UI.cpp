@@ -19,6 +19,9 @@ UI::UI(Engine & r_engine, std::shared_ptr<Configuration> conf) : engine(r_engine
 	size_t line_cells_number = engine.get_map().get_line_length();
 	size_t column_cells_number = engine.get_map().get_cells_number() / line_cells_number;
 	rectangles_texture.create(line_cells_number * DEFAULT_CELL_SIZE, column_cells_number * DEFAULT_CELL_SIZE);
+
+	rectangleNumber = engine.get_map().get_cells_number();
+	rectangles = get_cells_rectangles(DEFAULT_CELL_SIZE);
 }
 
 void
@@ -49,19 +52,24 @@ UI::run() {
 					new_map.kill_all_cells();
 					engine.set_map(new_map);
 				}
+
+                update_rectangles();
 			}
 		}
 
 		window.clear();
-		std::vector<sf::RectangleShape> rectangles =
-				get_cells_rectangles(DEFAULT_RECTANGLE_SIZE);
-        update_rectangle_texture(rectangles_texture, rectangles);
-		sf::Sprite rectangles_sprite(rectangles_texture.getTexture());
-		window.draw(rectangles_sprite);
+        for (sf::RectangleShape& rectangle : rectangles) {
+            window.draw(rectangle);
+        }
 		window.display();
 
 		sf::Time end = clock.getElapsedTime();
-		sf::sleep(timePerFrame - end + start);
+		sf::Time sleeping = timePerFrame - end + start;
+		if (sleeping.asMilliseconds() > 0) {
+		    sf::sleep(sleeping);
+		} else {
+		    // It's lagging
+		}
 	}
 }
 
@@ -88,6 +96,20 @@ UI::get_cells_rectangles(const float cells_width) const {
 	return result;
 }
 
+void
+UI::update_rectangles() {
+
+    const std::vector<Cell> cells = engine.get_map().get_cells();
+
+    for (int i = 0; i < rectangleNumber; i++) {
+        if (cells[i].is_alive()) {
+            rectangles[i].setFillColor(sf::Color::Blue);
+        } else {
+            rectangles[i].setFillColor(sf::Color::White);
+        }
+    }
+}
+
 size_t
 UI::get_touched_cell_index(const size_t x, const size_t y) const {
 	const size_t width = engine.get_map().get_line_length();
@@ -97,7 +119,7 @@ UI::get_touched_cell_index(const size_t x, const size_t y) const {
 }
 
 void
-UI::update_rectangle_texture(sf::RenderTexture& texture, const std::vector<sf::RectangleShape>& rectangles) const {
+UI::update_rectangle_texture(sf::RenderTexture& texture) const {
     texture.clear(sf::Color::Red);
     for (auto const & rectangle : rectangles) {
         texture.draw(rectangle);

@@ -20,10 +20,10 @@ namespace gol {
 class Engine {
 public:
 	/** To construct an Engine, a Rule and a Map are required! */
-	Engine(Rule c_rule, Map c_map) : rule(c_rule), map(c_map) {}
+	inline Engine(Rule c_rule, Map c_map) : rule(c_rule), map(c_map) {}
 
 	/** Map getter */
-	Map get_map() const { return map; }
+	inline Map& get_map() { return map; }
 
 	/** Map setter */
 	void set_map(const Map new_map) { map = new_map; }

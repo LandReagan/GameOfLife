@@ -35,15 +35,20 @@ public:
 private:
 	Engine & engine;
 	sf::RenderTexture rectangles_texture;
+    std::vector<sf::RectangleShape> rectangles;
+    int rectangleNumber;
 
     std::vector<sf::RectangleShape>
     get_cells_rectangles(float cells_width) const;
+
+    void
+    update_rectangles();
 
 	size_t
 	get_touched_cell_index(size_t x, size_t y) const;
 
 	void
-	update_rectangle_texture(sf::RenderTexture&, const std::vector<sf::RectangleShape> &) const;
+	update_rectangle_texture(sf::RenderTexture&) const;
 
 	// SFML stuff
 	GolWindow window;
